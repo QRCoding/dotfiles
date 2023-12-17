@@ -115,6 +115,6 @@ myXmobarPP =
     blue = xmobarColor "#bd93f9" ""
     white = xmobarColor "#f8f8f2" ""
     yellow = xmobarColor "#f1fa8c" ""
-    yellow2 = xmobarColor "#ffcd3c" ""
+    yellow2 = xmobarColor "#ffb86c" ""
     red = xmobarColor "#ff5555" ""
     lowWhite = xmobarColor "#bbbbbb" ""

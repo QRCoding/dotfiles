@@ -115,3 +115,8 @@ source $ZSH/oh-my-zsh.sh
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 [ -f "/home/quinten/.ghcup/env" ] && source "/home/quinten/.ghcup/env" # ghcup-env
+# alias ls="ls -lah"
+alias c="clear"
+alias n="nvim"
+alias hs="cd ~/haskell"
+alias h="cd ~"
