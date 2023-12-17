@@ -30,6 +30,7 @@ import XMonad.Util.Loggers ( logTitles )
 import XMonad.Util.SpawnOnce ( spawnOnce )
 import XMonad.Util.Ungrab ()
 import Graphics.X11.ExtraTypes.XF86 ()
+import XMonad.Actions.SpawnOn (spawnHere)
 
 main :: IO ()
 main =
@@ -70,6 +71,7 @@ myKeys = [ ("M-f", spawn "thunar")
   , ("M-t"  , spawn "change_player")
   , ("M-y"  , spawn "playerctl --player=brave play-pause")
   , ("M-i"  , spawn "konsole -e spotify_player")
+  , ("M-w"  , spawn "feh --bg-fill --no-fehbg --randomize ~/.wallpapers/*")
   ]
 
 myLayoutHook = spacingRaw False (Border 30 0 30 0) True (Border 0 30 0 30) True
@@ -82,7 +84,7 @@ myStartupHook = do
   --    \--SetPartialStrut true --expand true --width 10 \
   --    \--transparent true --tint 0x5f5f5f --height 18"
   -- spawnOnce "taffybar"
-  spawnOnce "feh --bg-fill --no-fehbg ~/.wallpapers/valley.png"
+  spawnOnce "feh --bg-fill --no-fehbg --randomize ~/.wallpapers/*"
   spawnOnce "xsetroot -cursor_name left_ptr"
   spawnOnce "picom -b --config ~/.config/picom/picom.conf"
   spawnOnce "playerctld daemon"

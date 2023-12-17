@@ -60,4 +60,5 @@ fi
 # bar+="]"
 
 # echo "${data::title_length} $position_formatted $bar $length_formatted"
-echo "${data::title_length}"
+# echo "${data::title_length}"
+echo "$data"

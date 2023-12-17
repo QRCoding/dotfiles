@@ -3,6 +3,7 @@ Config { overrideRedirect = False
        , additionalFonts = ["Mononoki Nerd Font 14","Font Awesome 14"]
        , bgColor  = "#1e2229"
        , fgColor  = "#f8f8f2"
+       , alpha    = 102
        , iconRoot = "/home/quinten/.xmonad/xpm-status-icons/icons/"
        , position = Static { xpos = 30 , ypos = 30, width = 3380 , height = 40 }
        , commands = [ Run Weather "EDDP"
