@@ -1,5 +1,5 @@
 Config { overrideRedirect = False
-       , font     = "Iosevka Semi-Bold 14"
+       , font     = "Hack Nerd Font Semi-Bold 12"
        , additionalFonts = ["Mononoki Nerd Font 14","Font Awesome 14"]
        , bgColor  = "#1e2229"
        , fgColor  = "#f8f8f2"
