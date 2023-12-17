@@ -1,0 +1,38 @@
+Config { overrideRedirect = False
+       , font     = "Iosevka Semi-Bold 14"
+       , additionalFonts = ["Mononoki Nerd Font 14","Font Awesome 14"]
+       , bgColor  = "#1e2229"
+       , fgColor  = "#f8f8f2"
+       , iconRoot = "/home/quinten/.xmonad/xpm-status-icons/icons/"
+       , position = Static { xpos = 30 , ypos = 30, width = 3380 , height = 40 }
+       , commands = [ Run Weather "EDDP"
+                        [ "--template", "<fn=1>\xe302</fn>> <tempC>°C"
+                        , "-L", "0"
+                        , "-H", "25"
+                        , "--low"   , "lightblue"
+                        , "--normal", "#f8f8f2"
+                        , "--high"  , "red"
+                        ] 36000
+                    , Run Cpu
+                        [ "-t", "<fn=1>\xf0ee0</fn>  Cpu: <total>%" 
+                        , "-L", "3"
+                        , "-H", "50"
+                        , "--high"  , "red"
+                        , "--normal", "green"                       
+                        ] 600
+                    , Run Alsa "default" "Master"
+                        [ "--template", "<fn=1>\xf057e</fn> <volumestatus>"
+                        , "--suffix"  , "True"
+                        , "--"
+                        , "--on", ""
+                        ] 
+                    , Run Memory ["--template", "<fn=1>\xf035b</fn>  Mem: <usedratio>%"] 600
+                    , Run Date "<fn=1>\xf00ed</fn>  %a %d-%m-%Y <fc=#8be9fd>(%H:%M)</fc>" "date" 600
+                    , Run XMonadLog
+                    , Run Com "/home/quinten/.local/bin/pacupdate" [] "updates" 36000
+                    , Run ComX "music_status" [] "Music status failed" "" 100
+                    ]
+       , sepChar  = "%"
+       , alignSep = "}{"
+       , template = "%XMonadLog% } %music_status% { %alsa:default:Master% | %updates% | %cpu%  | %memory% | %EDDP% | %date% "
+       }

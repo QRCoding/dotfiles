@@ -1,0 +1,10 @@
+#!/bin/bash
+
+player=$(<~/.local/bin/current_player.txt)
+if [[ $player == "spotify_player" ]]; then
+    echo "brave" > ~/.local/bin/current_player.txt
+fi
+
+if [[ $player == "brave" ]]; then
+    echo "spotify_player" > ~/.local/bin/current_player.txt
+fi

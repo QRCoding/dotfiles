@@ -1,0 +1,63 @@
+#!/bin/bash
+# shellcheck disable=2086
+
+# Script for making a nice spotify song / youtube video progress bar
+# Requires playerctl to be running
+
+player=$(<~/.local/bin/current_player.txt)
+if [ -z "$player" ]; then
+    player="spotify_player"
+    echo "spotify_player" > ~/.local/bin/current_player.txt
+fi
+
+bar_length=30
+title_length=75
+bar_icons="#."
+
+if playerctl --player=$player status |& grep -q "No players found"; then
+    if [[ "$player" == *"spotify_player"* ]]; then
+        echo " No music playing"
+        exit 0
+    elif [[ "$player" == *"brave"* ]]; then
+        echo "󰗃 No video playing"
+        exit 0
+    fi
+elif [[ $(playerctl --player=$player status) == *"Stopped"* ]]; then
+    if [[ "$player" = *"spotify_player"* ]]; then
+        echo " No music playing"
+        exit 0
+    elif [[ "$player" == *"brave"* ]]; then
+        echo "󰗃 No video playing"
+        exit 0
+    fi
+else
+    if [[ "$player" == *"spotify_player"* ]]; then
+        data=$(playerctl --player=spotify_player metadata --format " {{ status }} | {{ artist }} - {{ title }}")
+    elif [[ "$player" == "brave" ]]; then
+        data=$(playerctl --player=brave metadata --format "󰗃 {{ status }} | {{ title }}")
+    else
+        data=""
+    fi
+fi
+
+# position_formatted=$(playerctl --player=$player metadata --format "| {{ duration(position)}}")
+# length_formatted=$(playerctl --player=$player metadata --format "{{duration(mpris:length)}}")
+#
+# position=$(playerctl --player=$player metadata --format "{{position}}")
+# length=$(playerctl --player=$player metadata "mpris:length")
+
+# progress=$(((bar_length + 1) * position / (length + 1) ))
+
+# bar="["
+# for i in $(seq 1 $progress);
+# do
+#     bar+=${bar_icons:0:1}
+# done
+# for j in $(seq $((progress+1)) $bar_length);
+# do
+#     bar+=${bar_icons:1:1}
+# done
+# bar+="]"
+
+# echo "${data::title_length} $position_formatted $bar $length_formatted"
+echo "${data::title_length}"
