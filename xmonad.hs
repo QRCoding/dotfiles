@@ -102,7 +102,7 @@ myXmobarPP =
   where
     formatFocused = wrap (white "[") (white "]") . yellow2 . ppWindow
     formatUnfocused = wrap (lowWhite "[") (lowWhite "]") . blue . ppWindow . shorten 10
-
+--test
     -- \| Windows should have *some* title, which should not not exceed a
     -- sane length.
     ppWindow :: String -> String
