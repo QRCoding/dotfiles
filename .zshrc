@@ -81,6 +81,11 @@ plugins=(
     git
     zsh-autosuggestions
     fast-syntax-highlighting
+    web-search
+    z
+    fzf
+    thefuck
+    colored-man-pages
     # zsh-dircolors-nord
 )
 
@@ -121,3 +126,5 @@ alias n="nvim"
 alias hs="cd ~/haskell"
 alias h="cd ~"
 alias dot="cd ~/dotfiles"
+
+eval $(thefuck --alias)

@@ -72,6 +72,7 @@ myKeys = [ ("M-f", spawn "thunar")
   , ("M-y"  , spawn "playerctl --player=brave play-pause")
   , ("M-i"  , spawn "konsole -e spotify_player")
   , ("M-w"  , spawn "feh --bg-fill --no-fehbg --randomize ~/.wallpapers/*")
+  , ("M-n"  , spawn "nitrogen")
   ]
 
 myLayoutHook = spacingRaw False (Border 30 0 30 0) True (Border 0 30 0 30) True
@@ -84,10 +85,10 @@ myStartupHook = do
   --    \--SetPartialStrut true --expand true --width 10 \
   --    \--transparent true --tint 0x5f5f5f --height 18"
   -- spawnOnce "taffybar"
-  spawnOnce "feh --bg-fill --no-fehbg --randomize ~/.wallpapers/*"
-  spawnOnce "xsetroot -cursor_name left_ptr"
-  spawnOnce "picom -b --config ~/.config/picom/picom.conf"
-  spawnOnce "playerctld daemon"
+  spawnOnce "nitrogen --set-scaled --random ~/.wallpapers/* &"
+  spawnOnce "xsetroot -cursor_name left_ptr &"
+  spawnOnce "picom -b --config ~/.config/picom/picom.conf &"
+  spawnOnce "playerctld daemon &"
 
 myXmobarPP :: PP
 myXmobarPP =
