@@ -30,8 +30,9 @@ Config { overrideRedirect = False
                     , Run XMonadLog
                     , Run Com "/home/quinten/.local/bin/pacupdate" [] "updates" 36000
                     , Run ComX "music_status" [] "Music status failed" "" 100
+                    , Run DiskU [("/", "<fc=#6272a4><fn=1>\xf0a0</fn></fc>  Disk: <free> free")] [] 600
                     ]
        , sepChar  = "%"
        , alignSep = "}{"
-       , template = "%XMonadLog% } %music_status% { %alsa:default:Master% | %updates% | %cpu%  | %memory% | <fc=#FFFFFF>%EDDP%</fc> | %date% "
+       , template = "%XMonadLog% } %music_status% { %alsa:default:Master% | %updates% | %cpu%  | %memory% | %disku% | <fc=#FFFFFF>%EDDP%</fc> | %date% "
        }

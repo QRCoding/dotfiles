@@ -1,4 +1,5 @@
 -- imort System.Taffybar.Support.PagerHints (pagerHints)
+{-# LANGUAGE DataKinds #-}
 import XMonad
     ( mod4Mask,
       spawn,
@@ -7,9 +8,18 @@ import XMonad
       Default(def),
       X,
       XConfig(layoutHook, terminal, modMask, borderWidth,
-              focusedBorderColor, startupHook),
+              focusedBorderColor, startupHook, manageHook),
       Full(Full),
-      Tall(Tall) )
+      Tall(Tall),
+      xK_F1,
+      KeyMask,
+      KeySym,
+      io,
+      (<+>),
+      ManageHook,
+      composeAll,
+      className,
+      doFloat )
 import XMonad.Hooks.DynamicLog
     ( shorten,
       wrap,
@@ -25,12 +35,17 @@ import XMonad.Hooks.StatusBar
     ( defToggleStrutsKey, statusBarProp, withEasySB )
 import XMonad.Hooks.StatusBar.PP ()
 import XMonad.Layout.Spacing ( spacingRaw, Border(Border) )
-import XMonad.Util.EZConfig ( additionalKeysP )
+import XMonad.Util.EZConfig ( additionalKeysP, mkNamedKeymap )
 import XMonad.Util.Loggers ( logTitles )
 import XMonad.Util.SpawnOnce ( spawnOnce )
 import XMonad.Util.Ungrab ()
 import Graphics.X11.ExtraTypes.XF86 ()
 import XMonad.Actions.SpawnOn (spawnHere)
+import XMonad.Util.NamedActions
+import XMonad.Util.Run (spawnPipe, hPutStr)
+import System.IO (hClose)
+import XMonad.ManageHook ( (-->), (=?) )
+import XMonad.Config (defaultConfig)
 
 main :: IO ()
 main =
@@ -44,35 +59,53 @@ main =
 
 
 myConfig =
-  def
-    { terminal = "konsole",
-      modMask = mod4Mask,
-      borderWidth = 0,
-      focusedBorderColor = "#bd93f9",
-      startupHook = myStartupHook,
-      layoutHook = myLayoutHook
-    }
-    `additionalKeysP` myKeys
-                      
-myKeys :: [(String, X ())]
-myKeys = [ ("M-f", spawn "thunar")                             
-  , ("M-m", spawn "brave")                              
-  , ("M-p", spawn "rofi -show drun") 
+  addDescrKeys ((mod4Mask, xK_F1), showKeybindings) myKeys
+    def
+      { terminal = "konsole",
+        modMask = mod4Mask,
+        borderWidth = 0,
+        focusedBorderColor = "#bd93f9",
+        startupHook = myStartupHook,
+        layoutHook = myLayoutHook,
+        manageHook = myManageHook <+> manageHook def
+      }
+
+myManageHook :: ManageHook
+myManageHook = composeAll
+  [ className =? "Yad"      --> doFloat
+  , className =? "Nitrogen" --> doFloat
+  ]
+
+showKeybindings :: [((KeyMask, KeySym), NamedAction)]-> NamedAction
+showKeybindings x = addName "Show Keybindings" $ io $ do
+  h <- spawnPipe "yad --text-info --fontname=\"Hack Nerd Font Mono 12\" --fore=#46d9ff back=#282c36 --center --geometry=1200x800 --title \"Xmonad keybindings\""
+  hPutStr h (unlines $ showKm x)
+  hClose h
+  return ()
+
+myKeys c = (subtitle "Custom Keys":) $ mkNamedKeymap c $
+  [ ("M-f", addName "Thunar" $ spawn "thunar")                             
+  ]
+  ^++^
+  [ --("M-f", spawn "thunar" )
+    ("M-m", spawn "brave")
+  , ("M-p", spawn "rofi -show drun")
   , ("<XF86AudioPlay>", spawn "playerctl --player=spotify_player play-pause")
   , ("<XF86AudioPause>", spawn "playerctl --player=spotify_player play-pause")
   , ("<XF86AudioNext>", spawn "playerctl --player=spotify_player next")
   , ("<XF86AudioPrev>", spawn "playerctl --player=spotify_player previous")
   , ("<XF86AudioRaiseVolume>", spawn "pactl set-sink-volume 0 +1.5%")
   , ("<XF86AudioLowerVolume>", spawn "pactl set-sink-volume 0 -1.5%")
-  , ("<XF86AudioMute>", spawn "pactl set-sink-mute 0 toggle")                                 
+  , ("<XF86AudioMute>", spawn "pactl set-sink-mute 0 toggle")
   , ("M-<L>", spawn "spotify_player playback seek -- -10000")
   , ("M-<R>", spawn "spotify_player playback seek -- +10000")
-  , ("M-s"  , spawn "~/go/bin/spofi")
-  , ("M-t"  , spawn "change_player")
+  -- , ("M-s"  , spawn "~/go/bin/spofi")
+  , ("M-s"  , spawn "change_player")
   , ("M-y"  , spawn "playerctl --player=brave play-pause")
   , ("M-i"  , spawn "konsole -e spotify_player")
   , ("M-w"  , spawn "feh --bg-fill --no-fehbg --randomize ~/.wallpapers/*")
-  , ("M-n"  , spawn "nitrogen")
+  , ("M-n"  , spawn "nitrogen" :: X ())
+  , ("M-r"  , spawn "xmonad --restart")
   ]
 
 myLayoutHook = spacingRaw False (Border 30 0 30 0) True (Border 0 30 0 30) True
@@ -85,7 +118,7 @@ myStartupHook = do
   --    \--SetPartialStrut true --expand true --width 10 \
   --    \--transparent true --tint 0x5f5f5f --height 18"
   -- spawnOnce "taffybar"
-  spawnOnce "nitrogen --set-scaled --random ~/.wallpapers/* &"
+  spawnOnce "feh --bg-fill --no-fehbg --randomized ~/.wallpapers/*"
   spawnOnce "xsetroot -cursor_name left_ptr &"
   spawnOnce "picom -b --config ~/.config/picom/picom.conf &"
   spawnOnce "playerctld daemon &"
